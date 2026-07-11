@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WordHunt - Single & Multiplayer Word Game</title>
+  <meta name="description"
+    content="WordHunt is an exciting single-player vs AI and real-time multiplayer word finding game. Play with friends across multiple devices!">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- Background Animated Elements -->
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+
+
+
+  <!-- Main App Wrapper -->
+  <main id="app-container" class="glass-container">
+
+    <!-- Header (shared across screens where appropriate) -->
+    <header class="app-header">
+      <div class="logo">
+        <h1>Word<span class="highlight">Hunt</span></h1>
+      </div>
+      <div id="header-profile" class="header-profile hidden">
+        <button id="profile-trigger-btn" class="profile-btn" aria-label="View Profile">
+          <div class="header-profile-img-container">
+            <img id="header-profile-pic" src="" alt="Avatar" class="profile-pic-circle hidden">
+            <i id="header-profile-icon" class="fa-solid fa-circle-user"></i>
+          </div>
+          <span id="profile-display-username">Username</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 1. SIGN UP SCREEN -->
+    <section id="screen-signup" class="view-screen active">
+      <div class="auth-card">
+        <h2>Create Account</h2>
+        <p class="subtitle">Join WordHunt to play with friends!</p>
+        <form id="signup-form">
+          <div class="input-group">
+            <label for="signup-email">Email Address</label>
+            <input type="email" id="signup-email" placeholder="e.g. name@example.com" required autocomplete="email">
+          </div>
+          <div class="input-group">
+            <label for="signup-username">Username</label>
+            <input type="text" id="signup-username" placeholder="Choose a username" required autocomplete="username">
+          </div>
+          <div class="input-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" placeholder="Create password" required
+              autocomplete="new-password">
+          </div>
+          <div class="input-group">
+            <label for="signup-repassword">Confirm Password</label>
+            <input type="password" id="signup-repassword" placeholder="Repeat password" required
+              autocomplete="new-password">
+          </div>
+          <div id="signup-error" class="form-error hidden"></div>
+          <button type="submit" id="signup-submit-btn" class="btn btn-primary btn-block">Sign Up</button>
+        </form>
+        <div class="auth-switch">
+          <p>Already have an account? <a id="link-to-login" href="#">Login</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. LOGIN SCREEN -->
+    <section id="screen-login" class="view-screen hidden">
+      <div class="auth-card">
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Log in to enter the game</p>
+        <form id="login-form">
+          <div class="input-group">
+            <label for="login-identifier">Email or Username</label>
+            <input type="text" id="login-identifier" placeholder="Enter username or email" required
+              autocomplete="username">
+          </div>
+          <div class="input-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="Enter your password" required
+              autocomplete="current-password">
+          </div>
+          <div class="forgot-link-wrapper">
+            <a id="link-forgot-password" href="#">Forgot Password?</a>
+          </div>
+          <div id="login-error" class="form-error hidden"></div>
+          <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block">Log In</button>
+        </form>
+        <div class="auth-switch">
+          <p>Don't have an account? <a id="link-to-signup" href="#">Sign up</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. FORGOT PASSWORD SCREEN -->
+    <section id="screen-forgot" class="view-screen hidden">
+      <div class="auth-card">
+        <h2>Forgot Password</h2>
+        <p class="subtitle">Enter your registered email to reset password</p>
+        <form id="forgot-form">
+          <div class="input-group">
+            <label for="forgot-email">Email Address</label>
+            <input type="email" id="forgot-email" placeholder="e.g. name@example.com" required autocomplete="email">
+          </div>
+          <div id="forgot-error" class="form-error hidden"></div>
+          <div id="forgot-success" class="form-success hidden"></div>
+          <button type="submit" id="forgot-submit-btn" class="btn btn-primary btn-block">Send Reset Link</button>
+        </form>
+        <div class="auth-switch">
+          <p>Don't have an account? <a id="forgot-to-signup" href="#">Sign up</a></p>
+          <p><a id="forgot-to-login" href="#">Back to Login</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. RESET PASSWORD SCREEN -->
+    <section id="screen-reset-password" class="view-screen hidden">
+      <div class="auth-card">
+        <h2>Reset Password</h2>
+        <p class="subtitle">Set your new account password</p>
+        <form id="reset-password-form">
+          <div class="input-group">
+            <label for="reset-new-password">New Password</label>
+            <input type="password" id="reset-new-password" placeholder="Enter new password" required
+              autocomplete="new-password">
+          </div>
+          <div class="input-group">
+            <label for="reset-confirm-password">Confirm New Password</label>
+            <input type="password" id="reset-confirm-password" placeholder="Confirm new password" required
+              autocomplete="new-password">
+          </div>
+          <div id="reset-error" class="form-error hidden"></div>
+          <div id="reset-success" class="form-success hidden"></div>
+          <button type="submit" id="reset-submit-btn" class="btn btn-primary btn-block">Reset Password</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 5. HOME SCREEN -->
+    <section id="screen-home" class="view-screen hidden">
+      <div class="home-menu">
+        <div class="welcome-banner">
+          <h2>Hi, <span id="welcome-username">Player</span>!</h2>
+          <p>Select your gameplay mode</p>
+        </div>
+        <div class="menu-buttons">
+          <button id="btn-vs-ai" class="menu-btn vs-ai">
+            <div class="btn-icon"><i class="fa-solid fa-robot"></i></div>
+            <div class="btn-text">
+              <h3>VS AI</h3>
+              <p>Practice single-player training mode</p>
+            </div>
+          </button>
+          <button id="btn-vs-players" class="menu-btn vs-players">
+            <div class="btn-icon"><i class="fa-solid fa-users"></i></div>
+            <div class="btn-text">
+              <h3>VS Players</h3>
+              <p>Play real-time multiplayer with friends</p>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. PROFILE MODAL SCREEN -->
+    <div id="profile-overlay" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2>Your Profile</h2>
+          <button id="profile-close-btn" class="close-btn" aria-label="Close Profile">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="profile-update-form">
+            <div class="input-group profile-pic-group">
+              <label>Profile Picture</label>
+              <div class="profile-pic-setup-row">
+                <div class="profile-pic-container-large">
+                  <img id="profile-pic-preview" src="" alt="Avatar" class="profile-pic-circle-large hidden">
+                  <i id="profile-pic-placeholder" class="fa-solid fa-user placeholder-icon"></i>
+                </div>
+                <div class="profile-pic-upload-actions">
+                  <label for="profile-pic-input" class="btn btn-secondary btn-small"
+                    style="padding: 6px 12px; font-size: 0.8rem; cursor: pointer; display: inline-block;">
+                    <i class="fa-solid fa-camera"></i> Choose Photo
+                  </label>
+                  <input type="file" id="profile-pic-input" accept="image/*" style="display: none;">
+                  <button type="button" id="profile-pic-remove-btn" class="btn btn-danger btn-small hidden"
+                    style="padding: 6px 12px; font-size: 0.8rem; margin-top: 5px;"><i class="fa-solid fa-trash"></i>
+                    Remove</button>
+                  <div class="upload-hint" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Max
+                    size: 200KB</div>
+                </div>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="profile-username">Username</label>
+              <input type="text" id="profile-username" autocomplete="username">
+            </div>
+            <div class="input-group">
+              <label for="profile-email">Email Address</label>
+              <input type="email" id="profile-email" autocomplete="email">
+            </div>
+
+            <div class="divider"><span>Change Password (Optional)</span></div>
+
+            <div class="input-group">
+              <label for="profile-current-password">Current Password</label>
+              <input type="password" id="profile-current-password" placeholder="Verify current password"
+                autocomplete="current-password">
+            </div>
+            <div class="input-group">
+              <label for="profile-new-password">New Password</label>
+              <input type="password" id="profile-new-password" placeholder="Enter new password"
+                autocomplete="new-password">
+            </div>
+            <div id="profile-message" class="form-message hidden"></div>
+            <div class="profile-actions">
+              <button type="submit" id="profile-save-btn" class="btn btn-primary">Save Changes</button>
+              <button type="button" id="profile-logout-btn" class="btn btn-danger"><i
+                  class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. VS AI SETUP POPUP -->
+    <div id="ai-setup-overlay" class="modal-overlay hidden">
+      <div class="modal-card small">
+        <div class="modal-header">
+          <h2>AI Mode Setup</h2>
+          <button id="ai-setup-close-btn" class="close-btn" aria-label="Close Setup">&times;</button>
+        </div>
+        <div class="modal-body text-center">
+          <p>Choose the word length to play with:</p>
+          <div class="letter-selector">
+            <button id="ai-minus-btn" class="select-adjust-btn" aria-label="Decrease Length"><i
+                class="fa-solid fa-minus"></i></button>
+            <div id="ai-letter-count-box" class="letter-count-box">5</div>
+            <button id="ai-plus-btn" class="select-adjust-btn" aria-label="Increase Length"><i
+                class="fa-solid fa-plus"></i></button>
+          </div>
+          <button id="ai-start-game-btn" class="btn btn-primary mt-20">Start Game</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. VS AI GAME WINDOW -->
+    <section id="screen-game-ai" class="view-screen hidden">
+      <div class="game-header">
+        <div class="game-meta">
+          <span class="meta-label">Mode: <strong class="text-glow">VS AI</strong></span>
+        </div>
+        <div id="ai-guesses-count" class="guesses-badge">Number of guesses: 0</div>
+      </div>
+
+      <div class="game-board">
+        <!-- Masked Word Display -->
+        <div id="ai-word-display" class="word-letters-mask">_ _ _ _ _</div>
+
+        <!-- Guess Feedback Status Msg -->
+        <div id="ai-feedback-box" class="guess-feedback-message"></div>
+
+        <div class="game-actions-layout">
+          <!-- Input Area -->
+          <div class="guess-input-wrapper">
+            <label for="ai-guess-input">Enter Guess (Letter or Word)</label>
+            <div class="input-button-row">
+              <input type="text" id="ai-guess-input" placeholder="Type a letter or word..." maxlength="15">
+              <button id="ai-guess-btn" class="btn btn-success circle-btn" aria-label="Submit Guess">
+                <i class="fa-solid fa-check"></i>
+              </button>
+            </div>
+            <span class="input-hint">Tip: Guess a single letter or try to solve the entire word.</span>
+          </div>
+
+          <!-- Wrong Guesses Box -->
+          <div class="wrong-guesses-sidebar">
+            <h4>Wrong Guesses</h4>
+            <div id="ai-wrong-guesses-box" class="wrong-guesses-box"></div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="game-footer">
+        <button id="ai-exit-btn" class="btn btn-danger"><i class="fa-solid fa-door-open"></i> Exit Game</button>
+      </footer>
+    </section>
+
+    <!-- 9. VS PLAYERS (MULTIPLAYER) MODE SELECTION POPUP -->
+    <div id="players-mode-overlay" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2>VS Players Mode</h2>
+          <button id="players-mode-close-btn" class="close-btn" aria-label="Close Setup">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="grid-options">
+            <button id="btn-host-menu" class="option-btn">
+              <i class="fa-solid fa-house-chimney-user"></i>
+              <span>Host a Game</span>
+            </button>
+            <button id="btn-join-menu" class="option-btn">
+              <i class="fa-solid fa-right-to-bracket"></i>
+              <span>Join a Game</span>
+            </button>
+          </div>
+
+          <!-- Host Room Form (Collapsible/Hidden by default) -->
+          <form id="host-room-form" class="sub-form hidden mt-20">
+            <h3>Host Room Options</h3>
+            <div class="input-group">
+              <label for="host-room-id">Room ID</label>
+              <input type="text" id="host-room-id" placeholder="Choose a Room ID" required>
+            </div>
+            <div class="input-group">
+              <label for="host-password">Password</label>
+              <input type="text" id="host-password" placeholder="Choose a Room Password" required>
+            </div>
+            <div class="input-group">
+              <label>Number of Letters in Word</label>
+              <div class="letter-selector mini">
+                <button type="button" id="host-minus-btn" class="select-adjust-btn"><i
+                    class="fa-solid fa-minus"></i></button>
+                <div id="host-letter-count-box" class="letter-count-box">5</div>
+                <button type="button" id="host-plus-btn" class="select-adjust-btn"><i
+                    class="fa-solid fa-plus"></i></button>
+              </div>
+            </div>
+            <div class="input-group checkbox-group">
+              <input type="checkbox" id="host-spectate-chk">
+              <label for="host-spectate-chk">Spectate mode (Watch only, do not play)</label>
+            </div>
+            <div id="host-error" class="form-error hidden"></div>
+            <button type="submit" id="host-submit-btn" class="btn btn-primary btn-block">Host Room</button>
+          </form>
+
+          <!-- Join Room Form (Collapsible/Hidden by default) -->
+          <form id="join-room-form" class="sub-form hidden mt-20">
+            <h3>Enter Room Credentials</h3>
+            <div class="input-group">
+              <label for="join-room-id">Room ID</label>
+              <input type="text" id="join-room-id" placeholder="Enter Room ID" required>
+            </div>
+            <div class="input-group">
+              <label for="join-password">Password</label>
+              <input type="text" id="join-password" placeholder="Enter Room Password" required>
+            </div>
+            <div id="join-error" class="form-error hidden"></div>
+            <button type="submit" id="join-submit-btn" class="btn btn-primary btn-block">Verify Room</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. PLAYER INPUT WORD POPUP (Before entering multiplayer lobby/game) -->
+    <div id="player-word-overlay" class="modal-overlay hidden">
+      <div class="modal-card small">
+        <div class="modal-header">
+          <h2>Enter Your Word</h2>
+        </div>
+        <div class="modal-body text-center">
+          <p>Please enter your hidden word of <strong id="player-word-len-label">5</strong> letters. Other players will
+            try to guess this word.</p>
+          <form id="player-word-form" class="mt-20">
+            <div class="input-group">
+              <input type="text" id="player-secret-word-input" class="text-center text-uppercase tracking-wide"
+                placeholder="Enter Word" required autocomplete="off">
+            </div>
+            <div id="player-word-error" class="form-error hidden"></div>
+            <button type="submit" id="player-word-submit-btn" class="btn btn-success mt-10">Submit & Join Game</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11. MULTIPLAYER LOBBY SCREEN -->
+    <section id="screen-lobby" class="view-screen hidden">
+      <div class="lobby-card">
+        <h2>Room Lobby</h2>
+        <div class="room-details-box">
+          <p>Room ID: <strong id="lobby-room-id-val" class="text-glow">--</strong></p>
+          <p>Password: <span class="lobby-pass-wrapper"><strong id="lobby-room-pass-val">--</strong><button
+                type="button" id="lobby-toggle-pass-btn" class="btn-text-only hidden" aria-label="Toggle Password"><i
+                  class="fa-solid fa-eye"></i></button></span></p>
+          <p>Word Length: <strong id="lobby-word-len-val">--</strong> letters</p>
+        </div>
+
+        <div class="lobby-players">
+          <h3>Connected Players</h3>
+          <ul id="lobby-players-list" class="players-list">
+            <!-- Dynamically populated -->
+          </ul>
+        </div>
+
+        <div id="lobby-admin-panel" class="lobby-admin hidden mt-20">
+          <p class="admin-hint text-center">As Host, click start when all players have joined.</p>
+          <button id="lobby-start-btn" class="btn btn-primary btn-block" disabled>Start Game</button>
+        </div>
+
+        <div id="lobby-wait-msg" class="lobby-wait text-center mt-20">
+          <p><i class="fa-solid fa-spinner fa-spin"></i> Waiting for host to start the game...</p>
+        </div>
+      </div>
+      <footer class="game-footer mt-20">
+        <button id="lobby-exit-btn" class="btn btn-danger"><i class="fa-solid fa-door-open"></i> Leave Lobby</button>
+      </footer>
+    </section>
+
+    <!-- 12. MULTIPLAYER GAME SCREEN -->
+    <section id="screen-game-multi" class="view-screen hidden">
+      <div class="multi-game-layout">
+
+        <!-- Left Sidebar / top bar: Active Turn and Word details -->
+        <div class="multi-header">
+          <!-- User's Secret Word display -->
+          <div class="your-word-box">
+            <span class="label">Your Word:</span>
+            <div id="multi-your-word-container" class="your-word-queue">
+              <!-- [Q][U][E][U][E] dynamic layout -->
+            </div>
+          </div>
+
+          <!-- Active turn & timer -->
+          <div class="active-status-badge">
+            <span id="multi-turn-player-label">User1's Turn</span>
+            <div id="multi-timer-badge" class="timer-badge hidden">
+              <i class="fa-regular fa-clock"></i> <span id="multi-timer-val">30</span>s
+            </div>
+          </div>
+        </div>
+
+        <!-- Center Stage: Guess Board for other players words -->
+        <div class="multi-board">
+          <h3>Other Players' Words</h3>
+          <div id="multi-opponents-container" class="opponents-list">
+            <!-- Dynamic Opponents rows e.g:
+            <div class="opponent-row">
+              <span class="opp-username">User1</span>
+              <div class="opp-word-mask">_ _ _ _ _</div>
+              <input class="opp-guess-input" ...>
+              <button class="opp-guess-btn" ...>
+              <div class="opp-wrong-guesses">a, e</div>
+            </div>
+            -->
+          </div>
+
+          <!-- Real-time guess announcements -->
+          <div id="multi-guess-announcement" class="guess-announcement-box">
+            Waiting for players to guess...
+          </div>
+        </div>
+
+        <!-- Bottom section: Leaders Board and exit -->
+        <div class="multi-footer">
+          <div class="leaderboard-section">
+            <h3>Leaderboard</h3>
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Pos</th>
+                  <th>Username</th>
+                  <th>Points</th>
+                </tr>
+              </thead>
+              <tbody id="multi-leaderboard-body">
+                <!-- Sorted rows -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="multi-game-actions">
+            <button id="multi-exit-btn" class="btn btn-danger"><i class="fa-solid fa-door-open"></i> Exit Game</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. SPECTATOR WINDOW -->
+    <section id="screen-spectator" class="view-screen hidden">
+      <div class="spectator-layout">
+        <div class="spectator-header">
+          <div class="spec-logo">Spectator View</div>
+          <div class="room-info">
+            Room ID: <span id="spec-room-id" class="text-glow">--</span> |
+            Password: <span id="spec-room-password">--</span>
+          </div>
+        </div>
+
+        <div class="spectator-main">
+          <div class="spectator-guesses">
+            <h3>Active Game Progression</h3>
+            <div id="spec-players-container" class="opponents-list">
+              <!-- Dynamically populated player masks -->
+            </div>
+
+            <div id="spec-announcement" class="guess-announcement-box mt-20">
+              Spectator Mode Active
+            </div>
+          </div>
+
+          <div class="spectator-sidebar">
+            <div class="timer-box text-center mb-20">
+              <span id="spec-active-player">Turn</span>
+              <div class="timer-badge large mt-10">
+                <i class="fa-regular fa-clock"></i> <span id="spec-timer-val">30</span>s
+              </div>
+            </div>
+
+            <div class="leaderboard-section">
+              <h3>Points Table</h3>
+              <table class="leaderboard-table">
+                <thead>
+                  <tr>
+                    <th>Pos</th>
+                    <th>Username</th>
+                    <th>Points</th>
+                  </tr>
+                </thead>
+                <tbody id="spec-leaderboard-body">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <footer class="game-footer mt-20">
+          <button id="spec-exit-btn" class="btn btn-danger"><i class="fa-solid fa-door-open"></i> Leave Room</button>
+        </footer>
+      </div>
+    </section>
+
+    <!-- 14. WINNER ANNOUNCEMENT SCREEN -->
+    <section id="screen-winner" class="view-screen hidden">
+      <div class="winner-card text-center">
+        <div class="crown-icon"><i class="fa-solid fa-trophy"></i></div>
+        <h2>Game Over!</h2>
+        <p class="subtitle">Final Results</p>
+        <p id="winner-host-disconnect-msg" class="form-error hidden" style="max-width: 320px; margin: 15px auto 0;">Host
+          disconnected. Game ended early.</p>
+
+        <!-- Podium Layout for Top 3 -->
+        <div class="podium-container">
+          <!-- 2nd Place -->
+          <div id="podium-2nd" class="podium-step second">
+            <div class="podium-badge">2</div>
+            <div id="winner-2nd-name" class="podium-username">Player 2</div>
+            <div id="winner-2nd-score" class="podium-score">-- pts</div>
+            <div class="podium-pedestal"></div>
+          </div>
+
+          <!-- 1st Place -->
+          <div id="podium-1st" class="podium-step first">
+            <div class="podium-badge"><i class="fa-solid fa-crown"></i></div>
+            <div id="winner-1st-name" class="podium-username">Player 1</div>
+            <div id="winner-1st-score" class="podium-score">-- pts</div>
+            <div class="podium-pedestal"></div>
+          </div>
+
+          <!-- 3rd Place -->
+          <div id="podium-3rd" class="podium-step third">
+            <div class="podium-badge">3</div>
+            <div id="winner-3rd-name" class="podium-username">Player 3</div>
+            <div id="winner-3rd-score" class="podium-score">-- pts</div>
+            <div class="podium-pedestal"></div>
+          </div>
+        </div>
+
+        <!-- Full Results List for larger rooms -->
+        <div class="rest-leaderboard mt-20">
+          <ul id="winner-rest-list" class="rest-list">
+            <!-- Filled dynamically -->
+          </ul>
+        </div>
+
+        <button id="winner-exit-btn" class="btn btn-primary mt-20"><i class="fa-solid fa-house"></i> Return to
+          Home</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Game Confirmation Dialog Overlay -->
+  <div id="confirm-overlay" class="modal-overlay hidden">
+    <div class="modal-card small confirmation">
+      <h3>Exit Game?</h3>
+      <p>Are you sure you want to exit the game?</p>
+      <div class="confirm-actions">
+        <button id="confirm-yes-btn" class="btn btn-danger">Yes</button>
+        <button id="confirm-no-btn" class="btn btn-secondary">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Socket.io library -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Client JavaScript modules -->
+  <script src="js/words.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/game-ai.js"></script>
+  <script src="js/game-multi.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+
+</html>

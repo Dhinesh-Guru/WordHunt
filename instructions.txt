@@ -1,0 +1,142 @@
+This is an Multiplayer/single player game.
+The user can play with AI(single player mode) or with other user/users with two or more devices(Multiplayer mode).
+In multiplayer mode , the users can invite each other to play the game.
+The host will generate a game id and share it with the other users.
+The other users will join the game using the game id.
+In player mode each user has to play/join the game by their own individual device. The players are open the game by opening the localhost link on their device and login with their own id, password then join the game with the game id & password created by the host.
+
+Signup/Login page:
+    ->The user can sign up/login using email and password  
+    ->In the sign up page the user will ask to enter email id, username, password and re-type password.
+    ->Sign up page should have "Already have an account ? Login" option to navigate to the login page.
+    ->In the login page the user will ask to enter email/username and password.
+    ->Login page must have forgot password option to reset the password.
+    ->When the user click forgot password it should lead them to a forgot password page.
+    ->Forgot password page should ask the user to enter email id.
+    ->When the user enter their email id and click on forgot password button, it should send a link to the user's email id to reset the password.
+    ->But before that it needs to verify the user's mail id was already signed-up if not tell the user that the mail id is not registered and provide a option to sign up.
+    ->When the user click on the link it should take them to a reset password page.
+    ->Reset password page should ask the user to enter new password and re-type new password.
+    ->When the user enter their new password and re-type new password and click on reset password button, it should reset the password and take them to the login page.
+    ->Forgot password page should have "Don't have an account ? Sign up" option to navigate to the sign up page.
+    ->Login page must have "Don't have an account ? Sign up" option to navigate to the sign up page.
+
+Home page:
+    ->It must have the game name at the top "WordHunt".
+    ->It must have the user profile icon at the top right corner.
+    ->On clicking the profile icon it should show the user's profile information.
+    ->And the user can edit/update their details such as username/password on their profile page.
+    ->The user can change their username or email id by just update the new username or email id but If they try to change the password before that they have to put their current password then only they will allow to change into new password.
+    ->And the user can logout from their profile page.
+    ->The home page should have two options: 
+    ->First one is vs AI mode
+    ->Second one is vs Players mode
+
+Points System:(Only applicable for Players mode not for AI mode. AI mode don't have any points table it's just like a training mode)
+    ->If the user guess the word correctly then the user will get number_of_letters_in_word_not_guessed * 3 + 2 points. But when the user guess the word there must be at-least three dashes('_') not guessed then only he can have number_of_letters_in_word_not_guessed * 3 + 2 points or else he can only got number_of_letters_not_guessed * 3 points.[for example, the letter was phone and in the game window it's look like p _ _ _ e if the user guess the word now then he can get 11 points because number_of_letters_in_word_not_guessed * 3 + 2 (ie: 3*3+2=11) or if the word like p h _ _ e then he can only got 6 points because there is only 2 letters are not guessed and for a correct letter guess the user can have 3 points (ie: 2*3=6)]
+    ->If the user guess the letter correctly then the user will get 3 points.
+    ->If the user guess the letter wrong then the user will lose 1 point.
+    ->If the user guess the word incorrectly then the user will lose number_of_letters_in_word_not_guessed * 1 points.
+    ->The points for each player should updated on the points table after each and every player make their guesses.
+
+AI mode:
+    -> If the user select AI mode then there has to be a pop-up window asking Number of letters the user wants to play with. Minimum letters is 5 and maximum letters is 9.
+    ->The number selection should be like - the number inside the box + .
+    ->Like in default the box should have 5 and the user can increase the letter count by clicking the plus icon on the right and decrease by - icon.
+    ->But the number should not go less than 5 or more than 9.
+    ->After selecting the number of letters the user can click on the start button.
+    ->On clicking start button it should navigate the user into AI game window.
+
+AI game window:
+    ->In this page the top right corner should have "Number of guesses: " information.
+    ->This should increase by 1 after each guesses user make(correct and wrong guesses) and by this the user will know how many guesses he/she has made to find that word.
+    ->At the top center should be the game name "WordHunt"
+    ->Under the game name it should display the randomly selected word.
+    ->Not the direct word only just the information of the length of the word by giving dashes (Example : _ _ _ _ _ for 5 letters word)
+    ->Below the word there has to be an area to notify the users guess was correct or wrong.
+    ->If correct it has to display "Username" guessed 'the letter he entered or word he entered' correctly in green colour. And the correct letter must be revealed in the dashes.
+    ->if wrong it had to display "Username" guessed 'the letter he entered or word he entered' wrong in red colour. And the incorrect letter must not be revealed in the dashes until the user guess that correctly.
+    ->Below the correct/wrong message display there should be an input box for entering the guesses. And user can type only the letter or entire word.
+    ->If the user guess the word or letter correctly then it must be revealed in the dashes.
+    ->In the right side of the input guess box there has to be an box with the name of wrong guesses.
+    ->If the user guess any letter wrong then the letter has to append on that box and separated by commas. (Only for letter) if the user guess the word wrong then the word should not be append to the box only the wrong letter should append to the box.
+    ->And the bottom-right corner should have the exit game button. When the user click the button it should ask the confirmation message "Are you sure you want to exit the game?" Yes/No.
+    ->If the user click Yes it should navigate them to the home page. If the user click No it should return them to the game window(from where they left/try to exit by mistake).
+
+Players mode:
+    ->If the user select Players mode then there has to be a pop-up window asking host a game or join a game.
+    ->If the user click host a game then there has to be a pop-up window asking the user(host) to type the room id, password, Number of letters in word and a spectate option with a checkbox for it. If the user(host) check the spectate option then he/she can spectate the game but not be able to participate as a player. He will navigate into spectate window where he can only watch other players are playing and their points and no option to guess words or letters. If the user(host) don't check the spectate option then he/she has to play the game. Before he join into the game he was asked for his word(the number of letter for the word was already given in the host window). After enter the word and click the join game button he will enter the players game window. The host can only join the game after enter his hidden word with the same number of letters he already given in host window. He doesn't need to enter any word for join the game in spectator mode the word need only if he decides to play.
+    ->If the user click join a game then there has to be a pop-up window asking the user(other) to type the room id and password. If the user type wrong id or password and error message shows to them as "Incorrect room ID/password". If the user click the correct id and password then they are asking for their own word(individually) with the limit of letters that already given by the host. After put that they will navigate into the players game window by clicking join game button. The user must be allowed to enter the game only after put their word ( with the same number of letters that host gave)
+
+Spectate Window:
+    ->Only access by the host also if only they checked the spectate mode in the host window. If the host in the spectate mode then he will enter the spectate window. 
+    ->In spectate window the host can see all the players are playing and their points and the word they are guessing. The host can only see the guessed letters like the other players not the entire word before anyone guess it, he can saw the points table and the word guess side by side. But the host can't play the game. He can only watch the game and can leave the game by clicking the exit game button.
+    ->In spectate window there should be the name of the game at the top center. And in the top right corner there should be room id and password. 
+    ->In the middle of the spectate window there should be the information of the word that the user is guessing. The information is dashes for each letter. For example: _ _ _ _ _ for 5 letters word and it should be like 
+    1.user_1     _ _ _ _ _                points table
+    2.user_2     _ _ _ _ _
+    and so on.
+    ->Right of the word information there should be an points table.
+    ->The points table will have the username respect to their points, and it was being updated after every guesses each user/player made.
+    ->The use with top score will be shown in the top of the points table in green and if the user left the game or disconnected from the game their score has to be shown in the table but they will not be able to play the game further. 
+    Points table
+    Position     Username              Points
+    1            user_1                300
+    2            user_2                280
+    3            user_3                250
+    and so on.
+    ->Points are must be provided by the points system conditions and it will always be in descending order.
+    ->At last there has to be an winner announcement page with the top 3 users and their scores and also the person with highest points will be in first position, second highest in second position and third highest in third position.
+    ->In that window there has to be an exit button if the spectating host touch that then he has to navigate to the home page.
+
+Game window:
+    ->At the top center there should be the game name.
+    ->In the top left there has to the word like Your Word : The user's word(which he entered before join the game) within a box of each letter. It can't be shown to other user.
+    ->In top right there has to be a timer of 30 seconds. It has to be shown only for the user who's guessing now. The condition will given in the Order for players to guess the letter.
+    ->If any other user guessed the letter of the user word then the letter must become grey to identify the user the letter was already found by someone.
+    ->In the middle of the window there should be the other users word info with the dashes. like
+    1.user_1     _ _ _ _ _   input-box    green button with tick icon
+    2.user_2     _ _ _ _ _   input-box    green button with tick icon
+    and so on.
+    ->The user can guess a letter or word of any one of the other users at a time by put his guess of their respected input box and clicking the tick button.
+    -> An user can allowed to only guess one user's letter or word at a time/turn.
+    ->If the user guess the letter of the user_1's word correctly then the letter must become grey to user_1's game window to identify the user_1 the letter was already found by user. And the user gets the points.
+    ->And in the user and user_2's game window the guessed letter of user_1 will be revealed. 
+    ->If the user guess a letter or word wrongly then has to be no changes than the points table(because for a wrong letter guess there will be a point detect from the user)
+    ->At the bottom right corner there should be an exit game button. If the user click the button it should ask the confirmation message "Are you sure you want to exit the game?" Yes/No.
+    ->If the user click Yes it should navigate them to the home page. If the user click No it should return them to the game window(from where they left/try to exit by mistake).
+    ->If the user exited the game then his/her word in the game window should be deleted with the dash and in their points table they're point will be change into disconnected/exited text and the other user can't guess the exited player's word anymore. The game will continue without the exited player.
+    ->Below the user info there has to be the points table and the point table just be as same as spectate window except the color of the font it has to be in white.
+    ->If the user guess the word or the letter correctly then points has to be given as the conditions and the points has to be updated in the points table.
+    ->Between the points table and user word info there has to be an area to notify the users guess was correct or wrong.
+    ->If user_1 is guessing a letter of user_2's word and it's correct then it has to display user_1 to user_2 : guessed 'the letter or word user_1 entered' correctly in green colour. And the correct letter must be revealed in the user_2's word's dashes.
+    ->If user_1 is guessing a letter of user_2's word and it's wrong then it has to display user_1 to user_2 : guessed 'the letter or word user_1 entered' wrongly in red colour.
+    ->And right side of the each user there is a box of wrong guesses only letters.( if it is the user's game window then he can see user_1 and user_2's wrong guess letters and he can't see his word's wrong guesses made by user_1 or user_2).
+    ->In these box if the user guess a letter in the user_1's word but that's a wrong guess then the letter must appear in the wrong guess box near the user_1 in both user and user_2's game window.
+    ->At last there has to be an winner announcement page with the top 3 users and their scores and also the person with highest points will be in first position, second highest in second position and third highest in third position.
+    ->Then they can leave the game using exit button at the end, and it will lead them to home page.            
+
+    model game window:
+    Your Word:  a box with the word the user enter before join the game each letter seperated by lines[like queue data structure]   timer:30(it has to go like 29,28,27.... until 0 or the user guess the word/letter on their turn)
+
+                                                                                            WRONG GUESSES:
+    User1:      _ _ _ _ _  inputbox    green button with tick icon    a box with the wrong guessed letters of user_1's word by user, user2 and user3
+    User2:      _ _ _ _ _  inputbox    green button with tick icon    a box with the wrong guessed letters of user_2's word by user, user1 and user3
+    User3:      _ _ _ _ _  inputbox    green button with tick icon    a box with the wrong guessed letters of user_3's word by user, user1 and user2
+    User1 to user2 : guessed 'a' correctly (in green colour)  (if it's user1's turn and he guessed user2's word has the letter 'a' correctly)
+
+                        Points table
+    Position     Username              Points
+    1            user1                 300
+    2            user2                 280
+    3            user3                 250
+    and so on.(At start of game everyone's points must be zero)
+
+Order for players to guess the letter:
+    ->It depends on the entry of the game.
+    ->First player is the user who entered the game first and he/she will be in the first position to guess the letter or word.
+    ->Then the next player who enter after him play their turn one by one.
+    ->After the last player guess the letter or word then the first player will get their second turn to guess the letter or word.
+    ->This cycle will continue until the end of the game.
+    ->A player has only 30 seconds for a turn to guess the word he has to guess a word before 30 seconds. if he doesn't guess any word by click the tick button after put something on the guess input box before 30 seconds the user will lost their turn, the next user will guess the word he has to wait for the next turn. 
+    -> The 30 seconds was being refreshed for every player in every turn. If user_1 guess the word at 15 seconds remaining(it's right or wrong that's not a matter) , the user_2 will have the timer of 30 seconds to guess the letter for their turn. And at the end of the last user the user_1 will get again 30 seconds to guess the letter for his second turn.
