@@ -240,9 +240,11 @@ app.post('/api/auth/forgot-password', async (req, res) => {
   }
   try {
     const token = await db.requestPasswordReset(email);
-    const hostIp = getLocalIpAddress();
-    const port = process.env.PORT || 3000;
-    const resetLink = `http://${hostIp}:${port}/#reset-password?token=${token}`;
+    let hostDomain = `http://${getLocalIpAddress()}:${process.env.PORT || 3000}`;
+    if (process.env.RENDER_EXTERNAL_URL) {
+      hostDomain = process.env.RENDER_EXTERNAL_URL;
+    }
+    const resetLink = `${hostDomain}/#reset-password?token=${token}`;
     
     // Log the link in console for easy testing/retrieval
     console.log('\n=========================================');
