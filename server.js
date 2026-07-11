@@ -623,6 +623,35 @@ io.on('connection', (socket) => {
     handleExiting(socket);
   });
 
+  // Handle chat messages in multiplayer rooms
+  socket.on('chat_message', ({ roomId, message }) => {
+    const room = rooms.get(roomId);
+    if (!room) return;
+
+    const player = room.players.find(p => p.socketId === socket.id);
+    let senderName = 'Spectator';
+    let senderAvatar = null;
+    let senderId = 'spectator';
+
+    if (player) {
+      senderName = player.username;
+      senderAvatar = player.profilePic;
+      senderId = player.id;
+    } else if (socket.id === room.spectatorHostId) {
+      senderName = 'Host (Spectator)';
+      senderAvatar = null;
+      senderId = 'host';
+    }
+
+    io.to(roomId).emit('chat_message_received', {
+      senderName,
+      senderAvatar,
+      senderId,
+      message: message.trim().slice(0, 150),
+      timestamp: Date.now()
+    });
+  });
+
   // Socket disconnected
   socket.on('disconnect', () => {
     console.log(`Socket disconnected: ${socket.id}`);

@@ -6,8 +6,17 @@ const GameMulti = {
   isSpectator: false,
   wordLength: 5,
   currentTurnUser: null,
-  
-  // Elements
+
+  // Chat Elements
+  elChatDrawer: null,
+  elChatMessages: null,
+  elChatInput: null,
+  elChatSendBtn: null,
+  elChatTriggerBtn: null,
+  elChatBadge: null,
+  elChatCloseBtn: null,
+  unreadMessagesCount: 0,
+  chatDrawerOpen: false,
   elLobbyRoomId: null,
   elLobbyRoomPass: null,
   elLobbyWordLen: null,
@@ -62,6 +71,18 @@ const GameMulti = {
     GameMulti.elSpecLeaderboardBody = document.getElementById('spec-leaderboard-body');
     GameMulti.elSpecAnnouncement = document.getElementById('spec-announcement');
 
+    // Chat elements
+    GameMulti.elChatDrawer = document.getElementById('chat-drawer');
+    GameMulti.elChatMessages = document.getElementById('chat-messages-container');
+    GameMulti.elChatInput = document.getElementById('chat-input');
+    GameMulti.elChatSendBtn = document.getElementById('chat-send-btn');
+    GameMulti.elChatTriggerBtn = document.getElementById('chat-trigger-btn');
+    GameMulti.elChatBadge = document.getElementById('chat-badge');
+    GameMulti.elChatCloseBtn = document.getElementById('chat-close-btn');
+
+    // Bind chat events
+    GameMulti.bindChatEvents();
+
     // Connect to WebSockets
     GameMulti.connectSockets();
   },
@@ -90,6 +111,7 @@ const GameMulti = {
 
       if (isSpectator) {
         App.switchScreen('screen-lobby');
+        GameMulti.elChatTriggerBtn.classList.remove('hidden');
       } else {
         // Must enter word before lobby
         GameMulti.showWordInputPopup(letterCount);
@@ -114,6 +136,7 @@ const GameMulti = {
     GameMulti.socket.on('joined_lobby', ({ roomId }) => {
       App.closeOverlay('player-word-overlay');
       App.switchScreen('screen-lobby');
+      GameMulti.elChatTriggerBtn.classList.remove('hidden');
     });
 
     // Lobby closed (Host left)
@@ -122,6 +145,7 @@ const GameMulti = {
       GameMulti.roomId = null;
       GameMulti.isHost = false;
       GameMulti.isSpectator = false;
+      GameMulti.resetChatState();
       App.switchScreen('screen-home');
     });
 
@@ -511,6 +535,38 @@ const GameMulti = {
         });
       }
     });
+
+    // Received chat message
+    GameMulti.socket.on('chat_message_received', ({ senderName, senderAvatar, senderId, message, timestamp }) => {
+      const isSelf = (senderId === Auth.currentUser?.id);
+      
+      const msgRow = document.createElement('div');
+      msgRow.className = `chat-message-row ${isSelf ? 'self' : ''}`;
+
+      const senderDiv = document.createElement('div');
+      senderDiv.className = 'chat-msg-sender';
+      
+      if (senderAvatar) {
+        senderDiv.innerHTML = `<img src="${senderAvatar}" alt="" class="chat-msg-avatar"> <span>${senderName}</span>`;
+      } else {
+        senderDiv.innerHTML = `<i class="fa-solid fa-circle-user" style="font-size: 0.9rem; color: var(--text-muted);"></i> <span>${senderName}</span>`;
+      }
+      msgRow.appendChild(senderDiv);
+
+      const bubbleDiv = document.createElement('div');
+      bubbleDiv.className = 'chat-msg-bubble';
+      bubbleDiv.textContent = message;
+      msgRow.appendChild(bubbleDiv);
+
+      GameMulti.elChatMessages.appendChild(msgRow);
+      GameMulti.elChatMessages.scrollTop = GameMulti.elChatMessages.scrollHeight;
+
+      // Handle unread badge
+      if (!GameMulti.chatDrawerOpen) {
+        GameMulti.unreadMessagesCount++;
+        GameMulti.updateChatBadge();
+      }
+    });
   },
 
   // Host room creation
@@ -558,7 +614,69 @@ const GameMulti = {
     GameMulti.roomId = null;
     GameMulti.isHost = false;
     GameMulti.isSpectator = false;
+    GameMulti.resetChatState();
     App.switchScreen('screen-home');
+  },
+
+  resetChatState: () => {
+    if (GameMulti.elChatTriggerBtn) GameMulti.elChatTriggerBtn.classList.add('hidden');
+    if (GameMulti.elChatDrawer) GameMulti.elChatDrawer.classList.remove('open');
+    if (GameMulti.elChatMessages) GameMulti.elChatMessages.innerHTML = '';
+    GameMulti.unreadMessagesCount = 0;
+    GameMulti.chatDrawerOpen = false;
+    GameMulti.updateChatBadge();
+  },
+
+  updateChatBadge: () => {
+    if (GameMulti.unreadMessagesCount > 0) {
+      GameMulti.elChatBadge.textContent = GameMulti.unreadMessagesCount;
+      GameMulti.elChatBadge.classList.remove('hidden');
+    } else {
+      GameMulti.elChatBadge.classList.add('hidden');
+    }
+  },
+
+  bindChatEvents: () => {
+    GameMulti.elChatTriggerBtn.addEventListener('click', () => {
+      GameMulti.elChatDrawer.classList.add('open');
+      GameMulti.chatDrawerOpen = true;
+      GameMulti.unreadMessagesCount = 0;
+      GameMulti.updateChatBadge();
+      GameMulti.elChatInput.focus();
+      setTimeout(() => {
+        GameMulti.elChatMessages.scrollTop = GameMulti.elChatMessages.scrollHeight;
+      }, 50);
+    });
+
+    GameMulti.elChatCloseBtn.addEventListener('click', () => {
+      GameMulti.elChatDrawer.classList.remove('open');
+      GameMulti.chatDrawerOpen = false;
+    });
+
+    const sendMessage = () => {
+      const text = GameMulti.elChatInput.value.trim();
+      if (!text) return;
+      GameMulti.socket.emit('chat_message', {
+        roomId: GameMulti.roomId,
+        message: text
+      });
+      GameMulti.elChatInput.value = '';
+    };
+
+    GameMulti.elChatSendBtn.addEventListener('click', sendMessage);
+    GameMulti.elChatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    document.querySelectorAll('.quick-chat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const text = btn.getAttribute('data-text');
+        GameMulti.socket.emit('chat_message', {
+          roomId: GameMulti.roomId,
+          message: text
+        });
+      });
+    });
   },
 
   // Show modal to enter secret word

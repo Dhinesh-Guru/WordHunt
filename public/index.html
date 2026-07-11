@@ -34,6 +34,12 @@
         <h1>Word<span class="highlight">Hunt</span></h1>
       </div>
       <div id="header-profile" class="header-profile hidden">
+        <!-- Chat trigger button (shown in multiplayer only) -->
+        <button id="chat-trigger-btn" class="chat-toggle-btn hidden" aria-label="Open Chat">
+          <i class="fa-solid fa-message"></i>
+          <span id="chat-badge" class="chat-badge hidden">0</span>
+        </button>
+
         <button id="profile-trigger-btn" class="profile-btn" aria-label="View Profile">
           <div class="header-profile-img-container">
             <img id="header-profile-pic" src="" alt="Avatar" class="profile-pic-circle hidden">
@@ -591,6 +597,32 @@
           Home</button>
       </div>
     </section>
+
+    <!-- Chat Drawer -->
+    <div id="chat-drawer" class="chat-drawer">
+      <div class="chat-drawer-header">
+        <h3>Room Chat</h3>
+        <button id="chat-close-btn" class="chat-close-btn" aria-label="Close Chat">&times;</button>
+      </div>
+      <div id="chat-messages-container" class="chat-messages">
+        <!-- Messages dynamically inserted here -->
+      </div>
+
+      <!-- Quick Chat emojis and phrases -->
+      <div class="chat-quick-actions">
+        <button class="quick-chat-btn" data-text="GG">GG</button>
+        <button class="quick-chat-btn" data-text="Nice guess!">👏</button>
+        <button class="quick-chat-btn" data-text="So close!">😅</button>
+        <button class="quick-chat-btn" data-text="😮">😮</button>
+        <button class="quick-chat-btn" data-text="🤔">🤔</button>
+        <button class="quick-chat-btn" data-text="😎">😎</button>
+      </div>
+
+      <div class="chat-input-wrapper">
+        <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off">
+        <button id="chat-send-btn" class="btn btn-primary" aria-label="Send Message"><i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+    </div>
 
   </main>
 
