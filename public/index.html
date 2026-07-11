@@ -181,88 +181,6 @@
       </div>
     </section>
 
-    <!-- 6. PROFILE MODAL SCREEN -->
-    <div id="profile-overlay" class="modal-overlay hidden">
-      <div class="modal-card">
-        <div class="modal-header">
-          <h2>Your Profile</h2>
-          <button id="profile-close-btn" class="close-btn" aria-label="Close Profile">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form id="profile-update-form">
-            <div class="input-group profile-pic-group">
-              <label>Profile Picture</label>
-              <div class="profile-pic-setup-row">
-                <div class="profile-pic-container-large">
-                  <img id="profile-pic-preview" src="" alt="Avatar" class="profile-pic-circle-large hidden">
-                  <i id="profile-pic-placeholder" class="fa-solid fa-user placeholder-icon"></i>
-                </div>
-                <div class="profile-pic-upload-actions">
-                  <label for="profile-pic-input" class="btn btn-secondary btn-small"
-                    style="padding: 6px 12px; font-size: 0.8rem; cursor: pointer; display: inline-block;">
-                    <i class="fa-solid fa-camera"></i> Choose Photo
-                  </label>
-                  <input type="file" id="profile-pic-input" accept="image/*" style="display: none;">
-                  <button type="button" id="profile-pic-remove-btn" class="btn btn-danger btn-small hidden"
-                    style="padding: 6px 12px; font-size: 0.8rem; margin-top: 5px;"><i class="fa-solid fa-trash"></i>
-                    Remove</button>
-                  <div class="upload-hint" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Max
-                    size: 200KB</div>
-                </div>
-              </div>
-            </div>
-            <div class="input-group">
-              <label for="profile-username">Username</label>
-              <input type="text" id="profile-username" autocomplete="username">
-            </div>
-            <div class="input-group">
-              <label for="profile-email">Email Address</label>
-              <input type="email" id="profile-email" autocomplete="email">
-            </div>
-
-            <div class="divider"><span>Change Password (Optional)</span></div>
-
-            <div class="input-group">
-              <label for="profile-current-password">Current Password</label>
-              <input type="password" id="profile-current-password" placeholder="Verify current password"
-                autocomplete="current-password">
-            </div>
-            <div class="input-group">
-              <label for="profile-new-password">New Password</label>
-              <input type="password" id="profile-new-password" placeholder="Enter new password"
-                autocomplete="new-password">
-            </div>
-            <div id="profile-message" class="form-message hidden"></div>
-            <div class="profile-actions">
-              <button type="submit" id="profile-save-btn" class="btn btn-primary">Save Changes</button>
-              <button type="button" id="profile-logout-btn" class="btn btn-danger"><i
-                  class="fa-solid fa-right-from-bracket"></i> Logout</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- 7. VS AI SETUP POPUP -->
-    <div id="ai-setup-overlay" class="modal-overlay hidden">
-      <div class="modal-card small">
-        <div class="modal-header">
-          <h2>AI Mode Setup</h2>
-          <button id="ai-setup-close-btn" class="close-btn" aria-label="Close Setup">&times;</button>
-        </div>
-        <div class="modal-body text-center">
-          <p>Choose the word length to play with:</p>
-          <div class="letter-selector">
-            <button id="ai-minus-btn" class="select-adjust-btn" aria-label="Decrease Length"><i
-                class="fa-solid fa-minus"></i></button>
-            <div id="ai-letter-count-box" class="letter-count-box">5</div>
-            <button id="ai-plus-btn" class="select-adjust-btn" aria-label="Increase Length"><i
-                class="fa-solid fa-plus"></i></button>
-          </div>
-          <button id="ai-start-game-btn" class="btn btn-primary mt-20">Start Game</button>
-        </div>
-      </div>
-    </div>
 
     <!-- 8. VS AI GAME WINDOW -->
     <section id="screen-game-ai" class="view-screen hidden">
@@ -306,93 +224,6 @@
       </footer>
     </section>
 
-    <!-- 9. VS PLAYERS (MULTIPLAYER) MODE SELECTION POPUP -->
-    <div id="players-mode-overlay" class="modal-overlay hidden">
-      <div class="modal-card">
-        <div class="modal-header">
-          <h2>VS Players Mode</h2>
-          <button id="players-mode-close-btn" class="close-btn" aria-label="Close Setup">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="grid-options">
-            <button id="btn-host-menu" class="option-btn">
-              <i class="fa-solid fa-house-chimney-user"></i>
-              <span>Host a Game</span>
-            </button>
-            <button id="btn-join-menu" class="option-btn">
-              <i class="fa-solid fa-right-to-bracket"></i>
-              <span>Join a Game</span>
-            </button>
-          </div>
-
-          <!-- Host Room Form (Collapsible/Hidden by default) -->
-          <form id="host-room-form" class="sub-form hidden mt-20">
-            <h3>Host Room Options</h3>
-            <div class="input-group">
-              <label for="host-room-id">Room ID</label>
-              <input type="text" id="host-room-id" placeholder="Choose a Room ID" required>
-            </div>
-            <div class="input-group">
-              <label for="host-password">Password</label>
-              <input type="text" id="host-password" placeholder="Choose a Room Password" required>
-            </div>
-            <div class="input-group">
-              <label>Number of Letters in Word</label>
-              <div class="letter-selector mini">
-                <button type="button" id="host-minus-btn" class="select-adjust-btn"><i
-                    class="fa-solid fa-minus"></i></button>
-                <div id="host-letter-count-box" class="letter-count-box">5</div>
-                <button type="button" id="host-plus-btn" class="select-adjust-btn"><i
-                    class="fa-solid fa-plus"></i></button>
-              </div>
-            </div>
-            <div class="input-group checkbox-group">
-              <input type="checkbox" id="host-spectate-chk">
-              <label for="host-spectate-chk">Spectate mode (Watch only, do not play)</label>
-            </div>
-            <div id="host-error" class="form-error hidden"></div>
-            <button type="submit" id="host-submit-btn" class="btn btn-primary btn-block">Host Room</button>
-          </form>
-
-          <!-- Join Room Form (Collapsible/Hidden by default) -->
-          <form id="join-room-form" class="sub-form hidden mt-20">
-            <h3>Enter Room Credentials</h3>
-            <div class="input-group">
-              <label for="join-room-id">Room ID</label>
-              <input type="text" id="join-room-id" placeholder="Enter Room ID" required>
-            </div>
-            <div class="input-group">
-              <label for="join-password">Password</label>
-              <input type="text" id="join-password" placeholder="Enter Room Password" required>
-            </div>
-            <div id="join-error" class="form-error hidden"></div>
-            <button type="submit" id="join-submit-btn" class="btn btn-primary btn-block">Verify Room</button>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- 10. PLAYER INPUT WORD POPUP (Before entering multiplayer lobby/game) -->
-    <div id="player-word-overlay" class="modal-overlay hidden">
-      <div class="modal-card small">
-        <div class="modal-header">
-          <h2>Enter Your Word</h2>
-          <button type="button" id="player-word-cancel-btn" class="close-btn" aria-label="Cancel">&times;</button>
-        </div>
-        <div class="modal-body text-center">
-          <p>Please enter your hidden word of <strong id="player-word-len-label">5</strong> letters. Other players will
-            try to guess this word.</p>
-          <form id="player-word-form" class="mt-20">
-            <div class="input-group">
-              <input type="text" id="player-secret-word-input" class="text-center text-uppercase tracking-wide"
-                placeholder="Enter Word" required autocomplete="off">
-            </div>
-            <div id="player-word-error" class="form-error hidden"></div>
-            <button type="submit" id="player-word-submit-btn" class="btn btn-success mt-10">Submit & Join Game</button>
-          </form>
-        </div>
-      </div>
-    </div>
 
     <!-- 11. MULTIPLAYER LOBBY SCREEN -->
     <section id="screen-lobby" class="view-screen hidden">
@@ -626,6 +457,178 @@
     </div>
 
   </main>
+
+  <!-- 6. PROFILE MODAL SCREEN -->
+  <div id="profile-overlay" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Your Profile</h2>
+        <button id="profile-close-btn" class="close-btn" aria-label="Close Profile">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="profile-update-form">
+          <div class="input-group profile-pic-group">
+            <label>Profile Picture</label>
+            <div class="profile-pic-setup-row">
+              <div class="profile-pic-container-large">
+                <img id="profile-pic-preview" src="" alt="Avatar" class="profile-pic-circle-large hidden">
+                <i id="profile-pic-placeholder" class="fa-solid fa-user placeholder-icon"></i>
+              </div>
+              <div class="profile-pic-upload-actions">
+                <label for="profile-pic-input" class="btn btn-secondary btn-small"
+                  style="padding: 6px 12px; font-size: 0.8rem; cursor: pointer; display: inline-block;">
+                  <i class="fa-solid fa-camera"></i> Choose Photo
+                </label>
+                <input type="file" id="profile-pic-input" accept="image/*" style="display: none;">
+                <button type="button" id="profile-pic-remove-btn" class="btn btn-danger btn-small hidden"
+                  style="padding: 6px 12px; font-size: 0.8rem; margin-top: 5px;"><i class="fa-solid fa-trash"></i>
+                  Remove</button>
+                <div class="upload-hint" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Max
+                  size: 200KB</div>
+              </div>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="profile-username">Username</label>
+            <input type="text" id="profile-username" autocomplete="username">
+          </div>
+          <div class="input-group">
+            <label for="profile-email">Email Address</label>
+            <input type="email" id="profile-email" autocomplete="email">
+          </div>
+
+          <div class="divider"><span>Change Password (Optional)</span></div>
+
+          <div class="input-group">
+            <label for="profile-current-password">Current Password</label>
+            <input type="password" id="profile-current-password" placeholder="Verify current password"
+              autocomplete="current-password">
+          </div>
+          <div class="input-group">
+            <label for="profile-new-password">New Password</label>
+            <input type="password" id="profile-new-password" placeholder="Enter new password"
+              autocomplete="new-password">
+          </div>
+          <div id="profile-message" class="form-message hidden"></div>
+          <div class="profile-actions">
+            <button type="submit" id="profile-save-btn" class="btn btn-primary">Save Changes</button>
+            <button type="button" id="profile-logout-btn" class="btn btn-danger"><i
+                class="fa-solid fa-right-from-bracket"></i> Logout</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. VS AI SETUP POPUP -->
+  <div id="ai-setup-overlay" class="modal-overlay hidden">
+    <div class="modal-card small">
+      <div class="modal-header">
+        <h2>AI Mode Setup</h2>
+        <button id="ai-setup-close-btn" class="close-btn" aria-label="Close Setup">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Choose the word length to play with:</p>
+        <div class="letter-selector">
+          <button id="ai-minus-btn" class="select-adjust-btn" aria-label="Decrease Length"><i
+              class="fa-solid fa-minus"></i></button>
+          <div id="ai-letter-count-box" class="letter-count-box">5</div>
+          <button id="ai-plus-btn" class="select-adjust-btn" aria-label="Increase Length"><i
+              class="fa-solid fa-plus"></i></button>
+        </div>
+        <button id="ai-start-game-btn" class="btn btn-primary mt-20">Start Game</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. VS PLAYERS (MULTIPLAYER) MODE SELECTION POPUP -->
+  <div id="players-mode-overlay" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>VS Players Mode</h2>
+        <button id="players-mode-close-btn" class="close-btn" aria-label="Close Setup">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-options">
+          <button id="btn-host-menu" class="option-btn">
+            <i class="fa-solid fa-house-chimney-user"></i>
+            <span>Host a Game</span>
+          </button>
+          <button id="btn-join-menu" class="option-btn">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Join a Game</span>
+          </button>
+        </div>
+
+        <!-- Host Room Form (Collapsible/Hidden by default) -->
+        <form id="host-room-form" class="sub-form hidden mt-20">
+          <h3>Host Room Options</h3>
+          <div class="input-group">
+            <label for="host-room-id">Room ID</label>
+            <input type="text" id="host-room-id" placeholder="Choose a Room ID" required>
+          </div>
+          <div class="input-group">
+            <label for="host-password">Password</label>
+            <input type="text" id="host-password" placeholder="Choose a Room Password" required>
+          </div>
+          <div class="input-group">
+            <label>Number of Letters in Word</label>
+            <div class="letter-selector mini">
+              <button type="button" id="host-minus-btn" class="select-adjust-btn"><i
+                  class="fa-solid fa-minus"></i></button>
+              <div id="host-letter-count-box" class="letter-count-box">5</div>
+              <button type="button" id="host-plus-btn" class="select-adjust-btn"><i
+                  class="fa-solid fa-plus"></i></button>
+            </div>
+          </div>
+          <div class="input-group checkbox-group">
+            <input type="checkbox" id="host-spectate-chk">
+            <label for="host-spectate-chk">Spectate mode (Watch only, do not play)</label>
+          </div>
+          <div id="host-error" class="form-error hidden"></div>
+          <button type="submit" id="host-submit-btn" class="btn btn-primary btn-block">Host Room</button>
+        </form>
+
+        <!-- Join Room Form (Collapsible/Hidden by default) -->
+        <form id="join-room-form" class="sub-form hidden mt-20">
+          <h3>Enter Room Credentials</h3>
+          <div class="input-group">
+            <label for="join-room-id">Room ID</label>
+            <input type="text" id="join-room-id" placeholder="Enter Room ID" required>
+          </div>
+          <div class="input-group">
+            <label for="join-password">Password</label>
+            <input type="text" id="join-password" placeholder="Enter Room Password" required>
+          </div>
+          <div id="join-error" class="form-error hidden"></div>
+          <button type="submit" id="join-submit-btn" class="btn btn-primary btn-block">Verify Room</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. PLAYER INPUT WORD POPUP (Before entering multiplayer lobby/game) -->
+  <div id="player-word-overlay" class="modal-overlay hidden">
+    <div class="modal-card small">
+      <div class="modal-header">
+        <h2>Enter Your Word</h2>
+        <button type="button" id="player-word-cancel-btn" class="close-btn" aria-label="Cancel">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Please enter your hidden word of <strong id="player-word-len-label">5</strong> letters. Other players will
+          try to guess this word.</p>
+        <form id="player-word-form" class="mt-20">
+          <div class="input-group">
+            <input type="text" id="player-secret-word-input" class="text-center text-uppercase tracking-wide"
+              placeholder="Enter Word" required autocomplete="off">
+          </div>
+          <div id="player-word-error" class="form-error hidden"></div>
+          <button type="submit" id="player-word-submit-btn" class="btn btn-success mt-10">Submit & Join Game</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
 
   <!-- Game Confirmation Dialog Overlay -->
   <div id="confirm-overlay" class="modal-overlay hidden">
