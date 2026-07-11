@@ -537,6 +537,12 @@ const App = {
         });
     });
 
+    // Player cancel input secret word (Back to lobby setup / home)
+    document.getElementById('player-word-cancel-btn').addEventListener('click', () => {
+      App.closeOverlay('player-word-overlay');
+      GameMulti.exitGame();
+    });
+
     // Lobby start game trigger
     document.getElementById('lobby-start-btn').addEventListener('click', () => {
       GameMulti.startGame();
