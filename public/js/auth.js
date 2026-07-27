@@ -33,7 +33,9 @@ const Auth = {
     });
     const data = await response.json();
     if (!response.ok) {
-      throw new Error(data.error || 'Signup failed.');
+      const err = new Error(data.error || 'Signup failed.');
+      err.suggestions = data.suggestions || [];
+      throw err;
     }
     return data;
   },

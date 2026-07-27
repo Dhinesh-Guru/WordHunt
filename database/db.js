@@ -32,6 +32,21 @@ if (process.env.FIREBASE_SERVICE_ACCOUNT) {
 const firestore = getFirestore();
 const usersCollection = firestore.collection('users');
 
+const generateUsernameSuggestions = async (baseUsername) => {
+  const base = baseUsername.trim();
+  const suffixes = ['01', '123', '@1', '_42', '99', '007', '_pro', '2026', 'X', '_01'];
+  const suggestions = [];
+  for (const suffix of suffixes) {
+    const candidate = `${base}${suffix}`;
+    const query = await usersCollection.where('usernameLower', '==', candidate.toLowerCase()).get();
+    if (query.empty) {
+      suggestions.push(candidate);
+      if (suggestions.length >= 3) break;
+    }
+  }
+  return suggestions;
+};
+
 const db = {
   // Sign Up a user
   signup: async (email, username, password) => {
@@ -43,7 +58,10 @@ const db = {
 
     const usernameQuery = await usersCollection.where('usernameLower', '==', username.toLowerCase()).get();
     if (!usernameQuery.empty) {
-      throw new Error('Username is already taken.');
+      const suggestions = await generateUsernameSuggestions(username);
+      const err = new Error('Username is already taken.');
+      err.suggestions = suggestions;
+      throw err;
     }
 
     // Hash password

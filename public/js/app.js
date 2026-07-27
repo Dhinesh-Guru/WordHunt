@@ -9,6 +9,12 @@ const App = {
     GameAI.init();
     GameMulti.init();
 
+    // Listen for browser Back/Forward navigation buttons
+    window.addEventListener('popstate', (e) => {
+      const targetScreen = e.state?.screen || (Auth.currentUser ? 'screen-home' : 'screen-login');
+      App.switchScreen(targetScreen, false);
+    });
+
     // Check query params for reset password token
     const token = App.getResetTokenFromHash();
     if (token) {
@@ -18,9 +24,20 @@ const App = {
       const user = Auth.init();
       if (user) {
         App.updateProfileUI(user);
-        App.switchScreen('screen-home');
+        
+        // Restore AI Game if active
+        if (GameAI.hasActiveSavedGame()) {
+          GameAI.restoreSavedGame();
+          if (window.location.hash === '#screen-game-ai') {
+            App.switchScreen('screen-game-ai', false);
+          } else {
+            App.switchScreen('screen-home', false);
+          }
+        } else {
+          App.switchScreen('screen-home', false);
+        }
       } else {
-        App.switchScreen('screen-login');
+        App.switchScreen('screen-login', false);
       }
     }
 
@@ -40,7 +57,7 @@ const App = {
   },
 
   // Screen Routing Switcher
-  switchScreen: (screenId) => {
+  switchScreen: (screenId, pushHistory = true) => {
     // Hide all view screens
     const screens = document.querySelectorAll('.view-screen');
     screens.forEach(s => s.classList.add('hidden'));
@@ -49,6 +66,11 @@ const App = {
     const target = document.getElementById(screenId);
     if (target) {
       target.classList.remove('hidden');
+    }
+
+    // Update browser history state
+    if (pushHistory && history.state?.screen !== screenId) {
+      history.pushState({ screen: screenId }, '', '#' + screenId);
     }
 
     // Header Profile display control
@@ -160,6 +182,7 @@ const App = {
     // Exit Game triggers
     document.getElementById('ai-exit-btn').addEventListener('click', () => {
       App.requestExitConfirmation(() => {
+        GameAI.clearState();
         App.switchScreen('screen-home');
       });
     });
@@ -208,8 +231,26 @@ const App = {
         signupForm.reset();
         App.switchScreen('screen-login');
       } catch (err) {
-        errorDiv.textContent = err.message;
+        errorDiv.innerHTML = `<div>${err.message}</div>`;
+        if (err.suggestions && err.suggestions.length > 0) {
+          const sugChips = err.suggestions.map(s => `<button type="button" class="suggestion-chip" data-username="${s}">${s}</button>`).join(' ');
+          errorDiv.innerHTML += `
+            <div class="suggestions-wrapper" style="margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+              <div style="margin-bottom: 6px; font-weight: 600;">Try these available usernames:</div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">${sugChips}</div>
+            </div>
+          `;
+        }
         errorDiv.classList.remove('hidden');
+
+        // Add event listeners to suggestion chips
+        const chips = errorDiv.querySelectorAll('.suggestion-chip');
+        chips.forEach(chip => {
+          chip.addEventListener('click', () => {
+            document.getElementById('signup-username').value = chip.getAttribute('data-username');
+            errorDiv.classList.add('hidden');
+          });
+        });
       }
     });
 
@@ -380,9 +421,14 @@ const App = {
   bindGameSetupEvents: () => {
     // VS AI Setup trigger
     document.getElementById('btn-vs-ai').addEventListener('click', () => {
-      App.aiLetterCount = 5;
-      document.getElementById('ai-letter-count-box').textContent = App.aiLetterCount;
-      App.openOverlay('ai-setup-overlay');
+      if (GameAI.hasActiveSavedGame()) {
+        GameAI.restoreSavedGame();
+        App.switchScreen('screen-game-ai');
+      } else {
+        App.aiLetterCount = 5;
+        document.getElementById('ai-letter-count-box').textContent = App.aiLetterCount;
+        App.openOverlay('ai-setup-overlay');
+      }
     });
 
     document.getElementById('ai-setup-close-btn').addEventListener('click', () => {
@@ -405,6 +451,7 @@ const App = {
 
     // Start AI game click
     document.getElementById('ai-start-game-btn').addEventListener('click', () => {
+      GameAI.clearState();
       App.closeOverlay('ai-setup-overlay');
       GameAI.startNewGame(App.aiLetterCount);
     });

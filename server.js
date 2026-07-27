@@ -190,7 +190,7 @@ app.post('/api/auth/signup', async (req, res) => {
     const user = await db.signup(email, username, password);
     res.status(201).json({ message: 'Signup successful!', user });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message, suggestions: error.suggestions || [] });
   }
 });
 
