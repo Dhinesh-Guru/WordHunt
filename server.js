@@ -312,6 +312,15 @@ app.post('/api/ai/start', (req, res) => {
   res.status(200).json({ gameId, maskedWord, wordLength: secretWord.length });
 });
 
+// Check AI Game Session Status
+app.get('/api/ai/session/:gameId', (req, res) => {
+  const game = aiGames.get(req.params.gameId);
+  if (!game) {
+    return res.status(404).json({ exists: false, error: 'Game session not found.' });
+  }
+  res.status(200).json({ exists: true });
+});
+
 // Submit Guess in AI Game
 app.post('/api/ai/guess', (req, res) => {
   const { gameId, guess } = req.body;

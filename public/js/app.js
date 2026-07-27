@@ -27,12 +27,13 @@ const App = {
         
         // Restore AI Game if active
         if (GameAI.hasActiveSavedGame()) {
-          GameAI.restoreSavedGame();
-          if (window.location.hash === '#screen-game-ai') {
-            App.switchScreen('screen-game-ai', false);
-          } else {
-            App.switchScreen('screen-home', false);
-          }
+          GameAI.restoreSavedGame().then(restored => {
+            if (restored && window.location.hash === '#screen-game-ai') {
+              App.switchScreen('screen-game-ai', false);
+            } else {
+              App.switchScreen('screen-home', false);
+            }
+          });
         } else {
           App.switchScreen('screen-home', false);
         }
@@ -420,15 +421,17 @@ const App = {
 
   bindGameSetupEvents: () => {
     // VS AI Setup trigger
-    document.getElementById('btn-vs-ai').addEventListener('click', () => {
+    document.getElementById('btn-vs-ai').addEventListener('click', async () => {
       if (GameAI.hasActiveSavedGame()) {
-        GameAI.restoreSavedGame();
-        App.switchScreen('screen-game-ai');
-      } else {
-        App.aiLetterCount = 5;
-        document.getElementById('ai-letter-count-box').textContent = App.aiLetterCount;
-        App.openOverlay('ai-setup-overlay');
+        const restored = await GameAI.restoreSavedGame();
+        if (restored) {
+          App.switchScreen('screen-game-ai');
+          return;
+        }
       }
+      App.aiLetterCount = 5;
+      document.getElementById('ai-letter-count-box').textContent = App.aiLetterCount;
+      App.openOverlay('ai-setup-overlay');
     });
 
     document.getElementById('ai-setup-close-btn').addEventListener('click', () => {

@@ -56,12 +56,24 @@ const GameAI = {
     }
   },
 
-  restoreSavedGame: () => {
+  restoreSavedGame: async () => {
     const raw = localStorage.getItem('wordhunt_ai_game');
     if (!raw) return false;
     try {
       const state = JSON.parse(raw);
       if (!state || !state.activeGameId) return false;
+
+      // Verify session status with server
+      try {
+        const checkRes = await fetch(`/api/ai/session/${state.activeGameId}`);
+        if (!checkRes.ok) {
+          GameAI.clearState();
+          return false;
+        }
+      } catch (e) {
+        // If offline or network glitch, proceed with client restore
+      }
+
       GameAI.activeGameId = state.activeGameId;
       GameAI.wordLength = state.wordLength || 5;
 
@@ -74,6 +86,7 @@ const GameAI = {
       return true;
     } catch (e) {
       console.error('Error restoring AI game:', e);
+      GameAI.clearState();
       return false;
     }
   },
@@ -127,6 +140,14 @@ const GameAI = {
         body: JSON.stringify({ gameId: GameAI.activeGameId, guess })
       });
       const data = await response.json();
+      
+      if (response.status === 404 || data.error === 'Game session not found.') {
+        GameAI.clearState();
+        alert('Game session expired or server restarted. Please start a new game.');
+        App.switchScreen('screen-home');
+        return;
+      }
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to submit guess.');
       }
